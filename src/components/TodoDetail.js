@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
 
-class TodoForm extends Component {
+class TodoDetail extends Component {
     constructor(props) {
         super(props);
-        this.addTodo = this.addTodo.bind(this);
+        this.todo = this.props.todos[Number(this.props.match.params.id)];
+        this.deleteTodo = this.deleteTodo.bind(this);
     }
-    addTodo() {
-        this.props.addTodo(this.refs.titleText.value, this.refs.descText.value);
+    deleteTodo() {
+        this.props.deleteTodo(this.props.match.params.id);
         this.props.history.push('/list')
     }
     render() {
@@ -18,7 +19,7 @@ class TodoForm extends Component {
                         <label className="siimple-label">Title:</label>
                     </div>
                     <div className="siimple-grid-col siimple-grid-col--12">
-                        <input type="text" ref="titleText" className="siimple-input siimple-input--fluid" />
+                        <label className="siimple-label siimple-label--fluid">{this.todo.title}</label>
                     </div>
                 </div>
 
@@ -27,13 +28,15 @@ class TodoForm extends Component {
                         <label className="siimple-label">Description:</label>
                     </div>
                     <div className="siimple-grid-col siimple-grid-col--12">
-                        <textarea ref="descText" rows="5" className="siimple-textarea siimple-textarea--fluid" />
+                        <label className="siimple-label siimple-label--fluid" >
+                        {this.todo.desc}
+                        </label>
                     </div>
                 </div>
 
                 <div className="siimple-grid-row">
                     <div className="siimple-grid-col">
-                        <input type="button" value="Save" onClick={this.addTodo} className="siimple-btn siimple-btn--teal" />
+                        <input type="button" value="Remove" onClick={this.deleteTodo} className="siimple-btn siimple-btn--red" />
                     </div>
                 </div>
             </div >
@@ -41,4 +44,4 @@ class TodoForm extends Component {
     }
 };
 
-export default withRouter(TodoForm)
+export default withRouter(TodoDetail)

@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
+import { BrowserRouter, Route } from 'react-router-dom';
+import Menu from './Menu';
 import TodoList from './TodoList';
 import TodoForm from './TodoForm';
+import TodoDetail from './TodoDetail';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       todos: [
-        { title: 'test message1' },
-        { title: 'test message2' },
-        { title: 'test message3' }
+        { title: 'test message1', desc: 'desc 1' },
+        { title: 'test message2', desc: 'desc 2' },
+        { title: 'test message3', desc: 'desc 3' }
       ]
     };
     this.addTodo = this.addTodo.bind(this);
@@ -17,9 +20,10 @@ class App extends Component {
     this.userId = this.getUserId();
   }
 
-  addTodo(value) {
+  addTodo(title, desc) {
     this.state.todos.push({
-      title: value
+      title: title,
+      desc: desc
     });
     this.setState({
       todos: this.state.todos
@@ -55,11 +59,16 @@ class App extends Component {
 
   render() {
     return (
-      <div className="siimple-box siimple--bg-white">
-        <h1 className="siimple-box-title siimple--color-dark">react-lumen-demo</h1>
-        <TodoList todos={this.state.todos} deleteTodo={this.deleteTodo} />
-        <TodoForm addTodo={this.addTodo} />
-      </div>
+      <BrowserRouter>
+        <div className="siimple-box siimple--bg-white">
+          <h1 className="siimple-box-title siimple--color-dark">react-lumen-demo</h1>
+          <Menu />
+          <Route exact path='/list' render={() => <TodoList todos={this.state.todos} />} />
+          <Route exact path='/list/:id' render={() => <TodoDetail todos={this.state.todos} deleteTodo={this.deleteTodo} />} />
+          <Route exact path='/create' render={() => <TodoForm addTodo={this.addTodo} />} />
+          <Route exact path='/' render={() => <TodoList todos={this.state.todos} deleteTodo={this.deleteTodo} />} />
+        </div>
+      </BrowserRouter>
     );
   }
 }
