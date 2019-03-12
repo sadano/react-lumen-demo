@@ -5,36 +5,52 @@ import TodoList from './TodoList';
 import TodoForm from './TodoForm';
 import TodoDetail from './TodoDetail';
 
+const API = 'http://localhost:8000/v1/todos';
+
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      todos: [
-        { title: 'test message1', desc: 'desc 1' },
-        { title: 'test message2', desc: 'desc 2' },
-        { title: 'test message3', desc: 'desc 3' }
-      ]
+      todos: [],
+      isLoading: false,
     };
     this.addTodo = this.addTodo.bind(this);
     this.deleteTodo = this.deleteTodo.bind(this);
     this.userId = this.getUserId();
   }
 
-  addTodo(title, desc) {
-    this.state.todos.push({
-      title: title,
-      desc: desc
-    });
-    this.setState({
-      todos: this.state.todos
-    });
+  componentDidMount() {
+    this.fetchTodo();
   }
 
-  deleteTodo(i) {
-    this.state.todos.splice(i, 1);
-    this.setState({
-      todos: this.state.todos
-    });
+  fetchTodo() {
+    fetch(API + '/' + this.userId)
+    .then(response => {
+      if (response.ok) {        
+        return response.json();
+      } else {
+        return { todos: [] };
+      }
+    })
+    .then(data => this.setState({ todos: data }));
+  }
+
+  addTodo(title, desc) {
+    fetch(API, {
+      method: "POST",
+      body: JSON.stringify({title: title, desc: desc, user_id: this.userId}),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => { this.fetchTodo() });
+  }
+
+  deleteTodo(todo_id) {
+    fetch(API + '/' + todo_id, {
+      method: "DELETE"
+    })
+    .then(response => { this.fetchTodo() });
   }
 
   getUserId() {

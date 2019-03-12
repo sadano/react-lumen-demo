@@ -8,7 +8,7 @@ class TodoForm extends Component {
     }
     addTodo() {
         this.props.addTodo(this.refs.titleText.value, this.refs.descText.value);
-        this.props.history.push('/list')
+        this.props.history.push('/list');
     }
     render() {
         return (
