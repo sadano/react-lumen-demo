@@ -29,9 +29,7 @@ class TodoDetail extends Component {
                         <label className="siimple-label">Description:</label>
                     </div>
                     <div className="siimple-grid-col siimple-grid-col--12">
-                        <label className="siimple-label siimple-label--fluid" >
-                        {this.todo.desc}
-                        </label>
+                        <textarea readOnly value={this.todo.desc} rows="5" className="siimple-textarea siimple-textarea--fluid" />
                     </div>
                 </div>
 
